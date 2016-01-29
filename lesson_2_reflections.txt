@@ -1,0 +1,68 @@
+What happens when you initialize a repository? Why do you need to do it?
+
+git creates a hidden directory where it stores all the metadata related tothe repository. You need it because this is where all the information about the repository, it's files and commits lives.
+
+How is the staging area different from the working directory and the repository? What value do you think it offers?
+
+It's not really different from the working directory since the .git repository itself is contained within the working directory. However the staging area is useful to show you what files still need to be committed.
+
+How can you use the staging area to make sure you have one commit per logical change?
+git diff with no files allows you to compare all current changes to see what changes you've made.
+git diff --staged allows you tom pare current changes with the most recent commit
+git diff commid1 commitid2 allows you to compare the difference between two commits.
+git checkout master allows you to checkout the master branch when you find that you are in a detached head state.
+git reset --hard should only be used as a last resort because you will not be able to recover any changes you've made to any files.
+git reset --hard should only be used as a last resort because you will not be able to recover any changes you've made to any files.
+
+git branch with no args shows the branch your on.
+git branch easy-mode would create a barnch named easy-mode.
+an asterisk next to a branch name (label) means that branch is currently checked out.
+To ensure that only the changes to easy-mode get saved ant no master, run git checkout easy-mode.
+Now when you run git branch with no arguments you should see that easy-mode is the branch currently checked out.
+
+What are some situations when branches would be helpful in keeping your history organized? How would branches help?
+Branches are useful when you want to try adding a new feature without changing the current production version. So if oyu had to add multiple new features you could create a branch for each one and then save the commits only to that branch until you're ready to merge it back into the master branch.
+
+Understanding the disconnected HEAD state message:
+Remember that in git, HEAD just means the current commit. so HEAD now points to the commit id of the last commit checked out.
+Git says you can look around and make exprimental changes and commit them. Remember that git's history can be non-linear. So if you made any changes and commited them then head would get updated to the commit you just made.
+Next is says you can discard any changes you've made without impacting any branches. SInce the commit isn't included in any branches it won't show up in git log. It's not reachable and the changes don't show up in any of the branches.
+
+Next, if you want to create a new branch git tells you that you can run the following command git checkout -b new_branch_name. THis is equivalent to running two commands. First, just like running git branch new_branch_name and then running git checkout on that new branch.
+
+The last line gives you a shortened version of the commit id head is currently on and the corresponding commit message.
+
+How do the diagrams help you visualize the branch structure?
+The branch diagrams can help you visualize what commits correspond with each branch, what commits are reachable from where and what would happen to head if you made any commits while in a disconnected HEAD state.
+
+Merging branches
+Example:
+Jake and Rachel are working onthe same file independently and what to merge files into a single branch. Write out the final list of which commits get added.
+Jale				Rachel		Final
+  						A		Unknown
+ B						B	yes		B
+  						C		unknown
+ D						D	yes		D
+ E								unknown
+						
+First, look at the lines that are the same in both version.
+Line b is inboth versions so yes, it should be in the final list of commits. The same is true for D.
+Rachel's file contain's A but Jake's doesn't. BEcause A could have been in the original document and Jake deleted it, or whether Rachel added it, we have to mark this as unknown for now as we don't have enough information to know for sure whether it should be in the final commit.
+The opposite applies for C since it is Rachel's file and not Jakes. So we don't know if it was in Jakes file and he deleted it or if Rachel added it so C has to be unkown as well.
+With E, we can't tell whether Jake added or Rachel deleted it so it too must be marked unknown.
+
+If we know that the original file at the start of the day contained A,B,D then we could determine that Jake deleted A but Rachel didn't touch it so we don't want A in the final file.
+C doesn't appear inthe original file and Jake doesn't have it either, but Rachel does. SInce it wasn't there to begin with we know that Rachel added it so it should be inthe final file.
+The same applies for E. Since Jake has it and Rachel doesn't, and it wasn't in the original file, we know Jake added it so we do want it in the final file.
+
+When merging two branches, the order the commits would appear in is determined by the time they were created. So this means the commits from the two branches might be shown as interleaved.
+
+How to merge two branches and delete the old branch label.
+First make sure you are onthe master branch. Run git branch and if not on master run git checkout master.
+Once on master run git merge master coins to create a merged version of these two branches.
+
+What is the result of merging two branches together? Why do we represent it in the diagram the way we do?
+The result is that now there are coins available in the game that were not there before and that were developed in a separate branch and merged into master. We represent the diagram the way we do so that it is easy to see what the last commit before the branch was and what commits belong tothe branch.
+
+What are the pros and cons of Git’s automatic merging vs. always doing merges manually?
+The pros of automatic merging means you don't have to visually scan potentially tens or hundreds of lines comparing changes manually. But when a manual merge is needed generally all the information in conflict is located within the special HEAD and master tags used by git.
